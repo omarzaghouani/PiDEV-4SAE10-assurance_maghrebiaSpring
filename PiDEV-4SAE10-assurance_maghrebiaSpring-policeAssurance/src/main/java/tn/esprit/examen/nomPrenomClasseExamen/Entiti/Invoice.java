@@ -34,5 +34,5 @@ public class Invoice {
     private Contract contract;  // Relation ManyToOne avec Contract
 
     @ManyToOne
-    private Client client;
+    private User User;
 }

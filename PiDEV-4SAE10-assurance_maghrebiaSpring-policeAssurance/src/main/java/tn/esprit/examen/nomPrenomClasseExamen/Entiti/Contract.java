@@ -3,7 +3,7 @@ package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import tn.esprit.examen.nomPrenomClasseExamen.Entiti.Client;
+import tn.esprit.examen.nomPrenomClasseExamen.Entiti.User;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.ContractDocument;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.ContractStatus;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.Invoice;
@@ -32,7 +32,7 @@ public class Contract {
     private ContractStatus status;
 
     @ManyToOne
-    private Client client;
+    private User User;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "document_id", referencedColumnName = "idDoc")

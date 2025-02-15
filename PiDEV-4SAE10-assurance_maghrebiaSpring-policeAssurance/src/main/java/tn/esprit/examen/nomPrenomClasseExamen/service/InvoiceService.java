@@ -38,7 +38,7 @@ public class InvoiceService implements IInvoiceService{
             updatedInvoice.setAmount(invoice.getAmount());
             updatedInvoice.setStatus(invoice.getStatus());
             updatedInvoice.setContract(invoice.getContract());
-            updatedInvoice.setClient(invoice.getClient());
+            updatedInvoice.setUser(invoice.getUser());
             return invoiceRepository.save(updatedInvoice);
         } else {
             throw new RuntimeException("Invoice not found with ID: " + id);
