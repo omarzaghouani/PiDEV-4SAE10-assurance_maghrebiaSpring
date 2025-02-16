@@ -1,0 +1,39 @@
+package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Table(name = "packages")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Package {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING) // This ensures the enum is stored as a string in the DB
+    private PackageType type;
+
+    private String name;
+    private String description;
+    private String imageUrl;
+    private int duration;
+    private double price;
+    private Date createdAt;
+    private Date updatedAt;
+
+    @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subscription> subscriptions;
+
+    @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL, orphanRemoval = true) // NEW RELATIONSHIP
+    private List<PartnershipOffer> partnershipOffers;
+}
