@@ -31,6 +31,13 @@ public class User {
     @OneToMany(mappedBy = "User", cascade = CascadeType.ALL)
     private List<Invoice> invoices;
 
-    // Getters and setters
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RefundDetails> refundDetailsList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<FraudInvestigation> fraudInvestigations;
+
+
+  // Getters and setters
 }
 

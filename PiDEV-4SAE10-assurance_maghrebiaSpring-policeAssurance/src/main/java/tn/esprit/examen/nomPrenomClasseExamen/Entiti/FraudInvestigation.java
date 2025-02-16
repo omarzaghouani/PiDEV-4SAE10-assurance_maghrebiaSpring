@@ -31,7 +31,9 @@ public class FraudInvestigation {
   @OneToOne
   @JoinColumn(name = "fraud_case_ref_id")
   private FraudDetails fraudDetails;
-/*
+  
   @ManyToOne
-  private User user;*/
+  @JoinColumn(name = "user_id")
+  private User user;
+
 }

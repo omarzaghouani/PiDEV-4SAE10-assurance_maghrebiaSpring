@@ -33,9 +33,10 @@ public class RefundDetails {
 
   @OneToOne(mappedBy = "refundDetails", cascade = CascadeType.ALL)
   private RefundAudit refundAudit;
-/*
+
   @ManyToOne
-  @JoinColumn(name = "user_id", insertable = false, updatable = false)
-  private User user;*/
+  @JoinColumn(name = "user_id")
+  private User user;
+
 
 }
