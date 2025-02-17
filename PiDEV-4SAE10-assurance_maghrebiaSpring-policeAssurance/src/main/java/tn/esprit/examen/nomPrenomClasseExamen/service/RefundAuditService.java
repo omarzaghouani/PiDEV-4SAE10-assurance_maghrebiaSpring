@@ -39,7 +39,7 @@ public class RefundAuditService implements IRefundAuditService{
       RefundAudit audit = existingAudit.get();
       audit.setProcessedBy(refundAudit.getProcessedBy());
       audit.setProcessedAt(refundAudit.getProcessedAt());
-      audit.setAuditReason(refundAudit.getAuditReason());
+      audit.setAuditReport(refundAudit.getAuditReport());
       return refundAuditRepo.save(audit);
     }
     return null;

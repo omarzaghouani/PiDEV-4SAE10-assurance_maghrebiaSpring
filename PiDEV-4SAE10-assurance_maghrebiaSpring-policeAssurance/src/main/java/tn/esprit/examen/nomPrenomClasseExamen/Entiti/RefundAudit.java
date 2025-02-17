@@ -21,7 +21,8 @@ public class RefundAudit {
 
   private int processedBy;
   private LocalDateTime processedAt;
-  private String auditReason;
+  @Lob
+  private byte[] auditReport;
 
   @OneToOne
   @JoinColumn(name = "refund_id")
