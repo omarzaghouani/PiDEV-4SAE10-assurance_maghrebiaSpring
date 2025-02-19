@@ -14,7 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/packages")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200") // ✅ Ensure it allows Angular frontend
 public class PackagesController {
 
     private final IPackageService packageService;
@@ -25,23 +25,20 @@ public class PackagesController {
         return ResponseEntity.ok(savedPackage);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Package> updatePackage(@PathVariable Long id, @RequestBody Package packageEntity) {
         Package updatedPackage = packageService.updatePackage(id, packageEntity);
         return updatedPackage != null ? ResponseEntity.ok(updatedPackage) : ResponseEntity.notFound().build();
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePackage(@PathVariable Long id) {
         try {
             packageService.deletePackage(id);
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Package deleted successfully");
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            return ResponseEntity.ok().body(Map.of("message", "Package deleted successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
         }
     }
 
