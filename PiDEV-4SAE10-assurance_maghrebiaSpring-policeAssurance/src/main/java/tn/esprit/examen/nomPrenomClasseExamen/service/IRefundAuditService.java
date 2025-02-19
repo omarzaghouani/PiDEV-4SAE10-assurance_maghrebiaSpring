@@ -15,4 +15,7 @@ public interface IRefundAuditService {
   RefundAudit updateRefundAudit(int id, RefundAudit refundAudit);
 
   void deleteRefundAudit(int id);
+
+
+  RefundAudit findByRefundId(int refundId);
 }

@@ -1,6 +1,7 @@
 package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,5 +27,6 @@ public class RefundAudit {
 
   @OneToOne
   @JoinColumn(name = "refund_id")
+  @JsonBackReference
   private RefundDetails refundDetails;
 }

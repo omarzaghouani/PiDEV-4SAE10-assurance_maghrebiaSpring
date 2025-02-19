@@ -49,4 +49,10 @@ public class RefundAuditService implements IRefundAuditService{
   public void deleteRefundAudit(int id) {
     refundAuditRepo.deleteById(id);
   }
+
+    @Override
+  public RefundAudit findByRefundId(int refundId) {
+    return refundAuditRepo.findByRefundDetails_RefundId(refundId);
+  }
+  
 }

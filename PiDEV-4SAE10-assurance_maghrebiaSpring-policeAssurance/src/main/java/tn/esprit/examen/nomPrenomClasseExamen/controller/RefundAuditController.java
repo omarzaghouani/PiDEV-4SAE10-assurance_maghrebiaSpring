@@ -52,4 +52,15 @@ public class RefundAuditController {
     refundAuditService.deleteRefundAudit(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
+
+  @GetMapping("/refund/{refundId}")
+  public ResponseEntity<RefundAudit> getRefundAuditByRefundId(@PathVariable int refundId) {
+    RefundAudit audit = refundAuditService.findByRefundId(refundId);
+    if (audit != null) {
+      return ResponseEntity.ok(audit);
+    } else {
+      return ResponseEntity.notFound().build();
+    }
+  }
+  
 }

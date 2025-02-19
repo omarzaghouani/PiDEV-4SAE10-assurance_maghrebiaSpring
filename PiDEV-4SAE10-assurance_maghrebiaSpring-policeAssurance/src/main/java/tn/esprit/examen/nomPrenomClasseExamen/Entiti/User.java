@@ -2,6 +2,8 @@ package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -32,12 +34,9 @@ public class User {
     private List<Invoice> invoices;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<RefundDetails> refundDetailsList;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<FraudInvestigation> fraudInvestigations;
-
-
-  // Getters and setters
+   
 }
 

@@ -18,7 +18,7 @@ public class RefundDetailsController {
   @Autowired
   private IRefundDetailsService refundDetailsService;
 
-  @PostMapping("/add")
+  @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
   public ResponseEntity<RefundDetails> createRefund(@RequestBody RefundDetails refundDetails) {
     RefundDetails createdRefund = refundDetailsService.addRefund(refundDetails);
     return new ResponseEntity<>(createdRefund, HttpStatus.CREATED);

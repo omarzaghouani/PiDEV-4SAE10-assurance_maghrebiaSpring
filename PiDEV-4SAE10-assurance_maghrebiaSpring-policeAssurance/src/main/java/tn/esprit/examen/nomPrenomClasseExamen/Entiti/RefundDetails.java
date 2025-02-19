@@ -1,5 +1,8 @@
 package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +11,8 @@ import tn.esprit.examen.nomPrenomClasseExamen.Entiti.RefundStatus;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -32,11 +37,19 @@ public class RefundDetails {
   private RefundStatus refundStatus;
 
   @OneToOne(mappedBy = "refundDetails", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private RefundAudit refundAudit;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
+  @JsonBackReference
   private User user;
+
+  // In RefundDetails.java
+  @OneToMany(mappedBy = "refundDetails", cascade = CascadeType.ALL)
+  @JsonManagedReference
+  private List<FraudInvestigation> fraudInvestigations;
+
 
 
 }
