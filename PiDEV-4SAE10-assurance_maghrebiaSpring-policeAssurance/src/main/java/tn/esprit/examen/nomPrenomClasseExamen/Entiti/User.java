@@ -2,11 +2,14 @@ package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.Set;
+
 @Getter
 @Setter
 @ToString
@@ -36,6 +39,10 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FraudInvestigation> fraudInvestigations;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<FeedBack> FeedBacks;
 
 
   // Getters and setters
