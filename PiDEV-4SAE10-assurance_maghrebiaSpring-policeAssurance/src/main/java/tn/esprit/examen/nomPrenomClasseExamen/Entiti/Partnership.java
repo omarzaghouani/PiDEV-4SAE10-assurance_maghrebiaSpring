@@ -26,4 +26,12 @@ public class Partnership {
 
     @OneToMany(mappedBy = "partnership", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PartnershipOffer> offers;
+
+    @ManyToMany
+    @JoinTable(
+            name = "partnership_packages",
+            joinColumns = @JoinColumn(name = "partnership_id"),
+            inverseJoinColumns = @JoinColumn(name = "package_id")
+    )
+    private List<Package> selectedPackages;
 }
