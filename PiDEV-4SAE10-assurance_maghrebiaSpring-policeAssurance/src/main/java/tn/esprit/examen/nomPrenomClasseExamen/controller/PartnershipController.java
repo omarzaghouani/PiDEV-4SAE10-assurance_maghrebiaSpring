@@ -43,13 +43,12 @@ public class PartnershipController {
         return partnershipService.addPartnership(partnership);
     }
 
-    @PutMapping("/update/{id}")  // ✅ Ensure this matches the request URL
-    public ResponseEntity<Partnership> updatePartnership(
-            @PathVariable Long id,
-            @RequestBody Partnership updatedPartnership) {
-        return ResponseEntity.ok(partnershipService.updatePartnership(id, updatedPartnership));
+    // ✅ Update partnership (Same style as your `updatePackage` method)
+    @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Partnership> updatePartnership(@PathVariable Long id, @RequestBody Partnership partnership) {
+        Partnership updatedPartnership = partnershipService.updatePartnership(id, partnership);
+        return updatedPartnership != null ? ResponseEntity.ok(updatedPartnership) : ResponseEntity.notFound().build();
     }
-
 
     // ✅ Delete partnership
     @DeleteMapping("/delete/{id}")
