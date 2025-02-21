@@ -47,7 +47,12 @@ public class RefundAuditService implements IRefundAuditService{
 
   @Override
   public void deleteRefundAudit(int id) {
-    refundAuditRepo.deleteById(id);
+    Optional<RefundAudit> audit = refundAuditRepo.findById(id);
+    if (audit.isPresent()) {
+      RefundAudit refundAudit = audit.get();
+      refundAudit.setRefundDetails(null); // Remove FK reference
+      refundAuditRepo.delete(refundAudit);
+    }
   }
 
     @Override

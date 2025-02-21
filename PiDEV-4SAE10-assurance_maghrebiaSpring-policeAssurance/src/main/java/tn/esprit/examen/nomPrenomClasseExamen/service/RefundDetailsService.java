@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.RefundDetails;
 import tn.esprit.examen.nomPrenomClasseExamen.repository.RefundDetailsRepo;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +41,7 @@ public class RefundDetailsService  implements IRefundDetailsService {
     //  refund.setUser_Id(refundDetails.getUser_Id());
       refund.setAmount(refundDetails.getAmount());
       refund.setReason(refundDetails.getReason());
+      refund.setProcessedAt(LocalDateTime.now());
       refund.setRefundStatus(refundDetails.getRefundStatus());
       return refundDetailsRepo.save(refund);
     }

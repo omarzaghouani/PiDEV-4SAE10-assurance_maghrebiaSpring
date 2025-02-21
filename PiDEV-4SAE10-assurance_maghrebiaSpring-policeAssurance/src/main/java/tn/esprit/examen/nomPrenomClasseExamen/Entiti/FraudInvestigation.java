@@ -19,9 +19,8 @@ public class FraudInvestigation {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
-
   private int fraudCaseId;
+  
   private String detectedBy;
   private LocalDateTime createdAt;
   private LocalDateTime resolvedAt;
@@ -33,9 +32,6 @@ public class FraudInvestigation {
   @JoinColumn(name = "fraud_case_ref_id")
   private FraudDetails fraudDetails;
   
-
-
-  // In FraudInvestigation.java
   @ManyToOne
   @JoinColumn(name = "refund_id")
   @JsonBackReference
