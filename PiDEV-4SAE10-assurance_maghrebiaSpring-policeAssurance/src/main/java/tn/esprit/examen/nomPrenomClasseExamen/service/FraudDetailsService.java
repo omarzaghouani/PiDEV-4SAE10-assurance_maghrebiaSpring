@@ -17,9 +17,19 @@ public class FraudDetailsService  implements IFraudDetailsService{
 
   @Override
   public FraudDetails addFraudDetails(FraudDetails fraudDetails) {
-    return fraudDetailsRepo.save(fraudDetails);
-  }
+    Optional<FraudDetails> existingDetails = fraudDetailsRepo.findByFraudInvestigation(fraudDetails.getFraudInvestigation());
 
+    if (existingDetails.isPresent()) {
+      throw new IllegalStateException("Fraud Details already exist for this Investigation!");
+    }
+
+    return fraudDetailsRepo.save(fraudDetails);  }
+
+
+  @Override
+  public Optional<FraudDetails> getFraudDetailsByFraudCaseId(int fraudCaseId) {
+    return fraudDetailsRepo.findByFraudCaseId(fraudCaseId);
+  }
   @Override
   public Optional<FraudDetails> getFraudDetailsById(int id) {
     return fraudDetailsRepo.findById(id);

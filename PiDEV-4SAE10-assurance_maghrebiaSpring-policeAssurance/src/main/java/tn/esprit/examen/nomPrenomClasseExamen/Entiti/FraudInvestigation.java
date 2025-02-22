@@ -2,9 +2,13 @@ package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -22,14 +26,16 @@ public class FraudInvestigation {
   private int fraudCaseId;
   
   private String detectedBy;
+  @CreationTimestamp
   private LocalDateTime createdAt;
+  @UpdateTimestamp
   private LocalDateTime resolvedAt;
 
   @Enumerated(EnumType.STRING)
   private FraudStatus status;
 
-  @OneToOne
-  @JoinColumn(name = "fraud_case_ref_id")
+  @OneToOne(mappedBy = "fraudInvestigation", cascade = CascadeType.ALL) 
+  @JsonManagedReference
   private FraudDetails fraudDetails;
   
   @ManyToOne

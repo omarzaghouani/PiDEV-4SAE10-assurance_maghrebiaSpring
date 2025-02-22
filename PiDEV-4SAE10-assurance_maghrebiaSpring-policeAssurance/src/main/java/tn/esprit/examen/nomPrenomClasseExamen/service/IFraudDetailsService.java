@@ -15,4 +15,7 @@ public interface IFraudDetailsService {
   FraudDetails updateFraudDetails(int id, FraudDetails fraudDetails);
 
   void deleteFraudDetails(int id);
+
+  Optional<FraudDetails> getFraudDetailsByFraudCaseId(int fraudCaseId);
+  
 }

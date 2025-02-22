@@ -1,6 +1,7 @@
 package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,7 +24,9 @@ public class FraudDetails {
   private float riskScore;
   private String actionTaken;
 
-  @OneToOne(mappedBy = "fraudDetails", cascade = CascadeType.ALL)
+  @OneToOne
+  @JoinColumn(name = "fraud_investigation_id" , unique = true) // Reference column moved here
+  @JsonBackReference
   private FraudInvestigation fraudInvestigation;
 
 }

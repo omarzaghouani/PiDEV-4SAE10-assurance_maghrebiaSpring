@@ -38,8 +38,7 @@ public class FraudInvestigationService implements  IFraudInvestigationService{
     //  investigation.setUser_Id(fraudInvestigation.getUser_Id());
       investigation.setStatus(fraudInvestigation.getStatus());
       investigation.setDetectedBy(fraudInvestigation.getDetectedBy());
-      investigation.setCreatedAt(fraudInvestigation.getCreatedAt());
-      investigation.setResolvedAt(fraudInvestigation.getResolvedAt());
+     
       return fraudInvestigationRepo.save(investigation);
     }
     return null;

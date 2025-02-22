@@ -51,4 +51,12 @@ public class FraudDetailsController {
     fraudDetailsService.deleteFraudDetails(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
+
+
+  @GetMapping("/fraud-case/{fraudCaseId}")
+  public ResponseEntity<FraudDetails> getFraudDetailsByFraudCaseId(@PathVariable int fraudCaseId) {
+    Optional<FraudDetails> fraudDetails = fraudDetailsService.getFraudDetailsByFraudCaseId(fraudCaseId);
+    return fraudDetails.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
 }
