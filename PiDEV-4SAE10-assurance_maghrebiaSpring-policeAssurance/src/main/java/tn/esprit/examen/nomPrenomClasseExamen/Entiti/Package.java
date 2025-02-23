@@ -1,5 +1,6 @@
 package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class Package {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore  // Prevents infinite loop
     private List<Subscription> subscriptions;
 
     @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL, orphanRemoval = true) // NEW RELATIONSHIP
