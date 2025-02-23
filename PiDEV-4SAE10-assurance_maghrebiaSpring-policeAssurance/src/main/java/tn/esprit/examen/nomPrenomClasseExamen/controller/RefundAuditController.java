@@ -62,5 +62,40 @@ public class RefundAuditController {
       return ResponseEntity.notFound().build();
     }
   }
-  
+
+
+
+  @GetMapping("/download/{id}")
+  public ResponseEntity<byte[]> downloadAuditReport(@PathVariable int id) {
+    Optional<RefundAudit> auditOptional = refundAuditService.getRefundAuditById(id);
+    if (auditOptional.isPresent()) {
+      RefundAudit audit = auditOptional.get();
+      byte[] auditReport = audit.getAuditReport();
+
+      return ResponseEntity.ok()
+              .header("Content-Disposition", "attachment; filename=audit-report-" + id + ".pdf") // Adjust filename/extension
+              .contentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM)
+              .body(auditReport);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+  }
+
+
+  @GetMapping("/view/{id}")
+  public ResponseEntity<byte[]> viewAuditReport(@PathVariable int id) {
+    Optional<RefundAudit> auditOptional = refundAuditService.getRefundAuditById(id);
+    if (auditOptional.isPresent()) {
+      RefundAudit audit = auditOptional.get();
+      byte[] auditReport = audit.getAuditReport();
+
+      return ResponseEntity.ok()
+              .contentType(org.springframework.http.MediaType.APPLICATION_PDF) // Adjust for your file type
+              .body(auditReport);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+  }
+
+
 }
