@@ -38,7 +38,7 @@ public class SubscriptionService implements ISubscriptionService {
             updatedSub.setStartDate(subscription.getStartDate());
             updatedSub.setEndDate(subscription.getEndDate());
             updatedSub.setStatus(subscription.getStatus());
-            updatedSub.setAPackage(subscription.getAPackage());
+            updatedSub.setApackage(subscription.getApackage()); // ✅ Ensuring the correct field
             return subscriptionRepository.save(updatedSub);
         }
         return null;

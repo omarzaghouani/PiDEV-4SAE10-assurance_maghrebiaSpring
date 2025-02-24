@@ -32,7 +32,7 @@ public class Package {
     private Date createdAt;
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "apackage", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore  // Prevents infinite loop
     private List<Subscription> subscriptions;
 

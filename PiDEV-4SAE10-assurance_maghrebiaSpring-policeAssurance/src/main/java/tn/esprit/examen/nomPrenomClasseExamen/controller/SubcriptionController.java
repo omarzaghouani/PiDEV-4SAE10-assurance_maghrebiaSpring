@@ -21,10 +21,16 @@ public class SubcriptionController {
     private final SubscriptionService subscriptionService;
 
     @PostMapping("/add")
-    public ResponseEntity<Subscription> addSubscription(@RequestBody Subscription subscription) {
-        Subscription savedSubscription = subscriptionService.addSubscription(subscription);
-        return ResponseEntity.ok(savedSubscription);
+    public ResponseEntity<?> addSubscription(@RequestBody Subscription subscription) {
+        try {
+            Subscription savedSubscription = subscriptionService.addSubscription(subscription);
+            return ResponseEntity.ok(savedSubscription);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error adding subscription: " + e.getMessage());
+        }
     }
+
 
     @GetMapping("/all")  // ✅ Matches /api/subscriptions/all
     public ResponseEntity<List<Subscription>> getAllSubscriptions() {
