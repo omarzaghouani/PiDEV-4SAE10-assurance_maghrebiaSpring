@@ -40,9 +40,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FraudInvestigation> fraudInvestigations;
 
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
     @JsonManagedReference
-    private List<FeedBack> FeedBacks;
+    private Set<FeedBack> FeedBacks;
 
 
   // Getters and setters

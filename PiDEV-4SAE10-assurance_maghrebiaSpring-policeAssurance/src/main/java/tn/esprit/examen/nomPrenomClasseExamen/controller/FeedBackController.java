@@ -8,7 +8,7 @@ import tn.esprit.examen.nomPrenomClasseExamen.service.IFeedbackService;
 
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/feedbacks")
 public class FeedBackController {
@@ -26,12 +26,12 @@ public class FeedBackController {
         return iFeedbackService.getAllFeedBacks();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<FeedBack> getFeedBackById(@PathVariable Long id) {
+    @GetMapping("/iooo/{id}") // Change the endpoint to just use the ID
+    public ResponseEntity<FeedBack> getFeedBackById(@PathVariable("id") Long id) {
         Optional<FeedBack> feedBack = iFeedbackService.getFeedBackById(id);
-        return feedBack.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return feedBack.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
     @PutMapping("/Update/{id}")
     public ResponseEntity<FeedBack> updateFeedBack(@PathVariable Long id, @RequestBody FeedBack updatedFeedBack) {
         try {

@@ -1,44 +1,52 @@
 package tn.esprit.examen.nomPrenomClasseExamen.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.FeedBack;
 import tn.esprit.examen.nomPrenomClasseExamen.repository.FeedBackRepository;
 
+
 import java.util.List;
 import java.util.Optional;
-@AllArgsConstructor
+
 @Service
+@RequiredArgsConstructor
 public class FeedBackService implements IFeedbackService {
+
     @Autowired
-    private FeedBackRepository feedBackRepository;
+    private final FeedBackRepository feedbackRepo;
 
-    // Ajouter un feedback
-    public FeedBack addFeedBack(FeedBack feedBack) {
-        return feedBackRepository.save(feedBack);
+    @Override
+    public FeedBack addFeedBack(FeedBack feedback) {
+        return feedbackRepo.save(feedback);
     }
 
-    // Récupérer tous les feedbacks
-    public List<FeedBack> getAllFeedBacks() {
-        return feedBackRepository.findAll();
-    }
-
-    // Récupérer un feedback par ID
+    @Override
     public Optional<FeedBack> getFeedBackById(Long id) {
-        return feedBackRepository.findById(id);
+        return feedbackRepo.findById(id);
     }
 
-    // Mettre à jour un feedback
-    public FeedBack updateFeedBack(Long id, FeedBack updatedFeedBack) {
-        return feedBackRepository.findById(id).map(feedBack -> {
-            feedBack.setMessage(updatedFeedBack.getMessage());
-            return feedBackRepository.save(feedBack);
-        }).orElseThrow(() -> new RuntimeException("FeedBack not found"));
+    @Override
+    public List<FeedBack> getAllFeedBacks() {
+        return feedbackRepo.findAll();
     }
 
-    // Supprimer un feedback
+    @Override
+    public FeedBack updateFeedBack(Long id, FeedBack feedback) {
+        return feedbackRepo.findById(id).map(existingFeedBack -> {
+            existingFeedBack.setUser(feedback.getUser());
+            existingFeedBack.setSubmissionDate(feedback.getSubmissionDate());
+            existingFeedBack.setDescription(feedback.getDescription());
+            existingFeedBack.setSatisfactionScore(feedback.getSatisfactionScore());
+            existingFeedBack.setProductService(feedback.getProductService());
+            existingFeedBack.setSentimentAnalysis(feedback.getSentimentAnalysis());
+            return feedbackRepo.save(existingFeedBack);
+        }).orElse(null);
+    }
+
+    @Override
     public void deleteFeedBack(Long id) {
-        feedBackRepository.deleteById(id);
+        feedbackRepo.deleteById(id);
     }
 }

@@ -17,14 +17,14 @@ public class FinancialManagementController {
     private final FinancialManagementService financialManagementService;
 
     // Ajouter un nouvel enregistrement financier
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<FinancialManagement> addFinancialRecord(@RequestBody FinancialManagement financialManagement) {
         FinancialManagement savedRecord = financialManagementService.addFinancialRecord(financialManagement);
         return ResponseEntity.ok(savedRecord);
     }
 
     // Récupérer tous les enregistrements financiers
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<FinancialManagement>> getAllFinancialRecords() {
         return ResponseEntity.ok(financialManagementService.getAllFinancialRecords());
     }
