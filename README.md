@@ -19,7 +19,7 @@ Une plateforme permettant la gestion des produits et services d'assurances.
 ### Other Tools  
 - Docker  
 - GitHub Actions  
-
+Docker  
 ## Getting Started  
 1. Clonez le repo  
 2. Lancez `docker-compose up`  
