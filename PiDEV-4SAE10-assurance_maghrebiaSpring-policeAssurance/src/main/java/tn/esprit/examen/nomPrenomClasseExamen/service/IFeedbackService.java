@@ -15,4 +15,6 @@ public interface IFeedbackService {
     FeedBack updateFeedBack(Long id, FeedBack updatedFeedBack);
 
     void deleteFeedBack(Long id);
+
+    String analyzeSentiment(String text);
 }
