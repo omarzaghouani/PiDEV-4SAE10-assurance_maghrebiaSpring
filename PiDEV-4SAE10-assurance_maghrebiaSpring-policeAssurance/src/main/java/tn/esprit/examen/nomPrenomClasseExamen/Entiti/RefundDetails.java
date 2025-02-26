@@ -27,11 +27,15 @@ public class RefundDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int refundId;
 
+  private  int userId;
   private int orderId;
   private double amount;
   private String reason;
   private LocalDateTime createdAt;
   private LocalDateTime processedAt;
+  
+  
+  
 
   @Enumerated(EnumType.STRING)
   private RefundStatus refundStatus;
@@ -39,13 +43,12 @@ public class RefundDetails {
   @OneToOne(mappedBy = "refundDetails", cascade = CascadeType.ALL)
   @JsonManagedReference
   private RefundAudit refundAudit;
-
+/*
   @ManyToOne
   @JoinColumn(name = "user_id")
   @JsonBackReference
-  private User user;
+  private User user;*/
 
-  // In RefundDetails.java
   @OneToMany(mappedBy = "refundDetails", cascade = CascadeType.ALL)
   @JsonManagedReference
   private List<FraudInvestigation> fraudInvestigations;

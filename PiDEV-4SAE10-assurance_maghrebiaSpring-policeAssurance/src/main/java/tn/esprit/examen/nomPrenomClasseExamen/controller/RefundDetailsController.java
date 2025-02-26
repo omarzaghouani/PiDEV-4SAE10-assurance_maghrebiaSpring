@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.RefundDetails;
+import tn.esprit.examen.nomPrenomClasseExamen.Entiti.User;
+import tn.esprit.examen.nomPrenomClasseExamen.repository.UserRepository;
 import tn.esprit.examen.nomPrenomClasseExamen.service.IRefundDetailsService;
 
 import java.util.List;
@@ -17,6 +19,9 @@ import java.util.Optional;
 public class RefundDetailsController {
   @Autowired
   private IRefundDetailsService refundDetailsService;
+  
+  
+  
 
   @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
   public ResponseEntity<RefundDetails> createRefund(@RequestBody RefundDetails refundDetails) {
@@ -52,4 +57,20 @@ public class RefundDetailsController {
     refundDetailsService.deleteRefund(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
+
+
+  @GetMapping("users/all")
+  public ResponseEntity<List<User>> getAllUsers() {
+    List<User> users = refundDetailsService.getAllusers();
+    return new ResponseEntity<>(users, HttpStatus.OK);
+  }
+
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<List<RefundDetails>> getRefundsByUserId(@PathVariable int userId) {
+    List<RefundDetails> refunds = refundDetailsService.findByUser_Id(userId);
+    return new ResponseEntity<>(refunds, HttpStatus.OK);
+  }
+
+
+
 }

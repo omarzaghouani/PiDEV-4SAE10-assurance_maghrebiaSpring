@@ -22,8 +22,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String lastName;
-    private String firstName;
+    private String username;
+  //  private String firstName;
     private String email;
     private String phone;
 
@@ -33,10 +33,12 @@ public class User {
     @OneToMany(mappedBy = "User", cascade = CascadeType.ALL)
     private List<Invoice> invoices;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+   /* @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<RefundDetails> refundDetailsList;
-
+*/
+    
+    
    
 }
 

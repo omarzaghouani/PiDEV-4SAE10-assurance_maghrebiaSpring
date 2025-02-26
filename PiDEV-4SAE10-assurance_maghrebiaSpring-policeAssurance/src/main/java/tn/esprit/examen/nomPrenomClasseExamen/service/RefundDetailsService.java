@@ -4,10 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.RefundDetails;
+import tn.esprit.examen.nomPrenomClasseExamen.Entiti.User;
 import tn.esprit.examen.nomPrenomClasseExamen.repository.RefundDetailsRepo;
+import tn.esprit.examen.nomPrenomClasseExamen.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,15 @@ import java.util.Optional;
 public class RefundDetailsService  implements IRefundDetailsService {
   @Autowired
    RefundDetailsRepo refundDetailsRepo;
+  
+  @Autowired
+  UserRepository userRepository;
+
+
+  @Override
+  public List<User> getAllusers() {
+    return userRepository.findAll();
+  }
 
   @Override
   public RefundDetails addRefund(RefundDetails refundDetails) {
@@ -55,4 +65,11 @@ public class RefundDetailsService  implements IRefundDetailsService {
   public void deleteRefund(int id) {
     refundDetailsRepo.deleteById(id);
   }
+
+  @Override
+  public List<RefundDetails> findByUser_Id(int userId) {
+    return refundDetailsRepo.findByUserId(userId);
+  }
+
+
 }
