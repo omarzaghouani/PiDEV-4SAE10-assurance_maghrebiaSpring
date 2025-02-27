@@ -47,4 +47,12 @@ public class SubscriptionService implements ISubscriptionService {
     public void deleteSubscription(Long id) {
         subscriptionRepository.deleteById(id);
     }
+
+
+    public boolean checkIfSubscriberExists(String subscriberName) {
+        System.out.println("🔍 Checking subscriber: " + subscriberName);
+        boolean exists = subscriptionRepository.existsBySubscriberNameIgnoreCase(subscriberName);
+        System.out.println("✅ Exists? " + exists);
+        return exists;
+    }
 }

@@ -55,4 +55,13 @@ public class SubcriptionController {
         subscriptionService.deleteSubscription(id);
         return ResponseEntity.ok().body("Subscription deleted successfully");
     }
+
+    //Advanced Functions :
+
+    @GetMapping("/exists/{subscriberName}")
+    public ResponseEntity<Boolean> checkSubscriberExists(@PathVariable String subscriberName) {
+        boolean exists = subscriptionService.checkIfSubscriberExists(subscriberName);
+        return ResponseEntity.ok(exists);
+    }
+
 }
