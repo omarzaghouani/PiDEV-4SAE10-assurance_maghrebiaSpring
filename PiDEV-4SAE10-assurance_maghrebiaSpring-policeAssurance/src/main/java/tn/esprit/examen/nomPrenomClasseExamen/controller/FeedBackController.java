@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/feedbacks")
@@ -20,13 +19,8 @@ public class FeedBackController {
     private IFeedbackService iFeedbackService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addFeedBack(@RequestBody FeedBack feedBack) {
-        try {
-            FeedBack newFeedback = iFeedbackService.addFeedBack(feedBack);
-            return ResponseEntity.ok(newFeedback);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public FeedBack addFeedBack(@RequestBody FeedBack feedBack) {
+        return iFeedbackService.addFeedBack(feedBack);
     }
 
     @GetMapping("/all")
@@ -34,14 +28,13 @@ public class FeedBackController {
         return iFeedbackService.getAllFeedBacks();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/iooo/{id}") // Change the endpoint to just use the ID
     public ResponseEntity<FeedBack> getFeedBackById(@PathVariable("id") Long id) {
         Optional<FeedBack> feedBack = iFeedbackService.getFeedBackById(id);
         return feedBack.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-    @PutMapping("/update/{id}")
+    @PutMapping("/Update/{id}")
     public ResponseEntity<FeedBack> updateFeedBack(@PathVariable Long id, @RequestBody FeedBack updatedFeedBack) {
         try {
             FeedBack updated = iFeedbackService.updateFeedBack(id, updatedFeedBack);
@@ -51,12 +44,11 @@ public class FeedBackController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/Delete/{id}")
     public ResponseEntity<Void> deleteFeedBack(@PathVariable Long id) {
         iFeedbackService.deleteFeedBack(id);
         return ResponseEntity.noContent().build();
     }
-
     @GetMapping("/sentiment-statistics")
     public ResponseEntity<Map<String, Long>> getSentimentStatistics() {
         List<FeedBack> feedbacks = iFeedbackService.getAllFeedBacks();
