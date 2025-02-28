@@ -53,4 +53,19 @@ public class PackagesController {
         Package packageEntity = packageService.getPackageById(id);
         return packageEntity != null ? ResponseEntity.ok(packageEntity) : ResponseEntity.notFound().build();
     }
+
+    //Advanced Functions Work Here :
+
+    @PutMapping("/{id}/reduce-price")
+    public ResponseEntity<Package> reducePrice(@PathVariable Long id, @RequestParam double percentage) {
+        Package updatedPackage = packageService.applyPriceReduction(id, percentage);
+        return updatedPackage != null ? ResponseEntity.ok(updatedPackage) : ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}/reset-price")
+    public ResponseEntity<Package> resetPrice(@PathVariable Long id) {
+        Package updatedPackage = packageService.resetPrice(id);
+        return updatedPackage != null ? ResponseEntity.ok(updatedPackage) : ResponseEntity.notFound().build();
+    }
+
 }

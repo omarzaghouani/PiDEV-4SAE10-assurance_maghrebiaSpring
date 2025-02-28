@@ -28,7 +28,9 @@ public class Package {
     private String description;
     private String imageUrl;
     private int duration;
+    // price should not be changed
     private double price;
+    private Double discountedPrice; // New field for discounted price
     private Date createdAt;
     private Date updatedAt;
 

@@ -10,4 +10,7 @@ public interface IPackageService {
     void deletePackage(Long id);
     List<Package> getAllPackages();
     Package getPackageById(Long id);
+    //a.f
+    public Package applyPriceReduction(Long id, double reductionPercentage);
+    public Package resetPrice(Long id);
 }

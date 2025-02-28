@@ -68,4 +68,30 @@ public class PackageService implements IPackageService {
     public Package getPackageById(Long id) {
         return packageRepository.findById(id).orElse(null);
     }
+
+    //Advanced Functions Here:
+
+    @Override
+    public Package applyPriceReduction(Long id, double reductionPercentage) {
+        return packageRepository.findById(id)
+                .map(existingPackage -> {
+                    double discountAmount = (existingPackage.getPrice() * reductionPercentage) / 100;
+                    existingPackage.setDiscountedPrice(existingPackage.getPrice() - discountAmount);
+                    return packageRepository.save(existingPackage);
+                })
+                .orElse(null);
+    }
+
+    @Override
+    public Package resetPrice(Long id) {
+        return packageRepository.findById(id)
+                .map(existingPackage -> {
+                    existingPackage.setDiscountedPrice(null); // Reset discount
+                    return packageRepository.save(existingPackage);
+                })
+                .orElse(null);
+    }
+
+
+
 }
