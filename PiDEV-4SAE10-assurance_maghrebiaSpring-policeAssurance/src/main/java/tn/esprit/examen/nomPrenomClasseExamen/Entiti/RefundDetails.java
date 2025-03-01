@@ -54,5 +54,5 @@ public class RefundDetails {
   private List<FraudInvestigation> fraudInvestigations;
 
 
-
+   
 }

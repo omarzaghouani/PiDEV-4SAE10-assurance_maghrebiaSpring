@@ -11,4 +11,6 @@ public interface FraudDetailsRepo extends JpaRepository<FraudDetails, Integer> {
     Optional<FraudDetails> findByFraudInvestigation(FraudInvestigation fraudInvestigation);
 
     Optional<FraudDetails> findByFraudCaseId(int fraudCaseId);
+
+    int countByFraudInvestigation(FraudInvestigation fraudInvestigation);
 }

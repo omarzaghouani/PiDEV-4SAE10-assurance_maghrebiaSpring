@@ -29,4 +29,5 @@ public class FraudDetails {
   @JsonBackReference
   private FraudInvestigation fraudInvestigation;
 
+  
 }

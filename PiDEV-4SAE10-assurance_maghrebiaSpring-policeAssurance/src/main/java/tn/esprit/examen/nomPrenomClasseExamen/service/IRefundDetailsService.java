@@ -20,4 +20,6 @@ public interface IRefundDetailsService {
   void deleteRefund(int id);
 
     List<RefundDetails> findByUser_Id(int userId);
+
+    RefundDetails processRefund(RefundDetails refund);
 }
