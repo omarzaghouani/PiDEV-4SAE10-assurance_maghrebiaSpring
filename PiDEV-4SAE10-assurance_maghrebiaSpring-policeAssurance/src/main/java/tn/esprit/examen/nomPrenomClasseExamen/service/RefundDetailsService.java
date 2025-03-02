@@ -24,6 +24,8 @@ public class RefundDetailsService  implements IRefundDetailsService {
   @Autowired
   UserRepository userRepository;
 
+  @Autowired
+  MailService mailService;
 
 
 
@@ -129,6 +131,10 @@ public class RefundDetailsService  implements IRefundDetailsService {
 @Override
 @Transactional
 public RefundDetails processRefund(RefundDetails refund) {
+
+  String userEmail =   userRepository.findEmailById(refund.getUserId()); 
+  String link = "http://localhost:4200/back/my-refunds";
+  
   System.out.println("🔍 Processing refund for fraud detection: " + refund.getRefundId());
 
   // ✅ Count previous fraud investigations for the user
@@ -171,11 +177,25 @@ public RefundDetails processRefund(RefundDetails refund) {
       fraudDetailsRepo.save(fraudDetails);
 
       System.out.println("✅ Fraud Investigation Created: Case #" + fraudInvestigation.getFraudCaseId());
+      mailService.sendHtmlEmail(
+              userEmail,
+              " 🔍Refund in process",
+              "Good news! Your refund is under study.",
+              "View My Refunds",
+              link
+      );
     }
   } else {
     // ✅ If not fraud, approve the refund
     refund.setRefundStatus(RefundStatus.APPROVED);
     System.out.println("✅ Refund approved (No fraud detected).");
+    mailService.sendHtmlEmail(
+            userEmail,
+            "✅ Refund Approved",
+            "Good news! Your refund has been approved.",
+            "View My Refunds",
+            link
+    );
   }
 
   return refundDetailsRepo.save(refund);
