@@ -13,4 +13,6 @@ public interface RefundDetailsRepo extends JpaRepository<RefundDetails, Integer>
 
     @Query("SELECT r FROM RefundDetails r LEFT JOIN FETCH r.fraudInvestigations WHERE r.refundStatus = 'PENDING'")
     List<RefundDetails> findAllByRefundStatus(RefundStatus refundStatus);
+
+    int countByUserId(int userId);
 }

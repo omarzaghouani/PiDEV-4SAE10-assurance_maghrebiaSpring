@@ -86,66 +86,101 @@ public class RefundDetailsService  implements IRefundDetailsService {
 
 
   
-  @Override
+/*  @Override
   @Transactional
   public RefundDetails processRefund(RefundDetails refund) {
-    // ✅ Fetch existing Fraud Investigation (if exists)
-    Optional<FraudInvestigation> fraudInvestigationOpt = fraudInvestigationRepo.findByRefundDetails(refund);
-    FraudInvestigation fraudInvestigation = fraudInvestigationOpt.orElse(null);
+    System.out.println("🔍 Processing refund for fraud detection: " + refund.getRefundId());
 
-    // ✅ Get fraud-related attributes (if present in FraudInvestigation)
-    int refundCount = refund.getFraudInvestigations().size(); // Number of past investigations
-    System.out.println("🔍 Refund Count: " + refundCount);
-    int previousFrauds = (fraudInvestigation != null) ? fraudDetailsRepo.countByFraudInvestigation(fraudInvestigation) : 0;
-    System.out.println("🔍 Previous Frauds: " + previousFrauds);
-    float riskScore = (fraudInvestigation != null && fraudInvestigation.getFraudDetails() != null) ?
-            fraudInvestigation.getFraudDetails().getRiskScore() : 0.5f; // Default risk score
-    System.out.println("🔍 Risk Score: " + riskScore);
-    String actionTaken = (fraudInvestigation != null && fraudInvestigation.getFraudDetails() != null) ?
-            fraudInvestigation.getFraudDetails().getActionTaken() : "None";
-    System.out.println("🔍 Action Taken: " + actionTaken);
+    // ✅ Fetch all fraud investigations related to this refund
+    List<FraudInvestigation> fraudInvestigations = fraudInvestigationRepo.findByRefundDetails(refund);
 
-    // Call fraud detection model
-    FraudDetectionService.FraudResult result = FraudDetectionService.predictFraud(
-            refund.getUserId(), refund.getOrderId(), refund.getAmount(),
-            mapReasonToCode(refund.getReason()), refundCount,
-            previousFrauds, riskScore, actionTaken.equals("Blocked") ? 1 : 0);
+    if (fraudInvestigations.isEmpty()) {
+      System.out.println("⚠️ No fraud investigation found, creating a new one...");
 
-    if (result.isFraud) {
-      refund.setRefundStatus(RefundStatus.PENDING);
-      System.out.println("🚨 Fraud Detected! Probability: " + result.probability);
+      // ✅ Create a new Fraud Investigation if none exist
+      FraudInvestigation fraudInvestigation = new FraudInvestigation();
+      fraudInvestigation.setRefundDetails(refund);
+      fraudInvestigation.setDetectedBy("AI Fraud Model");
+      fraudInvestigation.setCreatedAt(LocalDateTime.now());
+      fraudInvestigation.setStatus(FraudStatus.UNDER_REVIEW);
+      fraudInvestigation = fraudInvestigationRepo.save(fraudInvestigation);
+      fraudInvestigations.add(fraudInvestigation);
+      System.out.println("✅ Fraud Investigation Created: " + fraudInvestigation.getFraudCaseId());
+    } else {
+      System.out.println("🔎 Multiple fraud investigations exist for this refund.");
+    }
 
-      if (fraudInvestigation == null) {
-        // ✅ Create a new Fraud Investigation
-        fraudInvestigation = new FraudInvestigation();
-        fraudInvestigation.setRefundDetails(refund);
-        fraudInvestigation.setDetectedBy("AI Fraud Model");
-        fraudInvestigation.setCreatedAt(LocalDateTime.now());
-        fraudInvestigation.setStatus(FraudStatus.UNDER_REVIEW);
-        fraudInvestigation = fraudInvestigationRepo.save(fraudInvestigation);
-      }
-
-      // ✅ Create or Update Fraud Details
+    for (FraudInvestigation fraudInvestigation : fraudInvestigations) {
+      // ✅ Ensure fraud details exist for each fraud investigation
       Optional<FraudDetails> existingFraudDetails = fraudDetailsRepo.findByFraudInvestigation(fraudInvestigation);
-      FraudDetails fraudDetails;
-      if (existingFraudDetails.isPresent()) {
-        fraudDetails = existingFraudDetails.get();
-      } else {
-        fraudDetails = new FraudDetails();
-        fraudDetails.setFraudInvestigation(fraudInvestigation);
-      }
+      FraudDetails fraudDetails = existingFraudDetails.orElse(new FraudDetails());
+      fraudDetails.setFraudInvestigation(fraudInvestigation);
       fraudDetails.setFraudType("Automated Detection");
-      fraudDetails.setRiskScore((float) result.probability);
+      fraudDetails.setRiskScore(0.9f);
+      fraudDetails.setActionTaken("Pending Review");
+      fraudDetailsRepo.save(fraudDetails);
+      System.out.println("✅ Fraud Details Updated for Case #" + fraudInvestigation.getFraudCaseId());
+    }
+
+    // ✅ Update refund status
+    refund.setRefundStatus(RefundStatus.PROCESSED);
+    return refundDetailsRepo.save(refund);
+  }*/
+@Override
+@Transactional
+public RefundDetails processRefund(RefundDetails refund) {
+  System.out.println("🔍 Processing refund for fraud detection: " + refund.getRefundId());
+
+  // ✅ Count previous fraud investigations for the user
+  int refundCount = refundDetailsRepo.countByUserId(refund.getUserId()); // Number of refunds by this user
+  int previousFrauds = fraudDetailsRepo.countByUserId(refund.getUserId()); // Number of past fraud cases
+
+  // ✅ Call ML Model for fraud prediction
+  FraudDetectionService.FraudResult result = FraudDetectionService.predictFraud(
+          refund.getUserId(), refund.getOrderId(), refund.getAmount(),
+          mapReasonToCode(refund.getReason()), refundCount,
+          previousFrauds// Default risk score
+           // Default actionTaken (not blocked)
+  );
+
+  System.out.println("🚨 ML Prediction: Fraud=" + result.isFraud + ", Probability=" + result.probability);
+
+  if (result.isFraud) {
+    refund.setRefundStatus(RefundStatus.PROCESSED); // Mark refund as suspicious
+
+    // ✅ Check if a fraud investigation already exists
+    List<FraudInvestigation> fraudInvestigations = fraudInvestigationRepo.findByRefundDetails(refund);
+
+    if (fraudInvestigations.isEmpty()) {
+      System.out.println("⚠️ No fraud investigation found, creating a new one...");
+
+      // ✅ Create a new fraud investigation
+      FraudInvestigation fraudInvestigation = new FraudInvestigation();
+      fraudInvestigation.setRefundDetails(refund);
+      fraudInvestigation.setDetectedBy("AI Fraud Model");
+      fraudInvestigation.setCreatedAt(LocalDateTime.now());
+      fraudInvestigation.setStatus(FraudStatus.UNDER_REVIEW);
+      fraudInvestigation = fraudInvestigationRepo.save(fraudInvestigation);
+
+      // ✅ Create a new FraudDetails record
+      FraudDetails fraudDetails = new FraudDetails();
+      fraudDetails.setFraudInvestigation(fraudInvestigation);
+      fraudDetails.setFraudType("Automated Detection");
+      fraudDetails.setRiskScore((float) result.probability); // ✅ Use ML risk score
       fraudDetails.setActionTaken("Pending Review");
       fraudDetailsRepo.save(fraudDetails);
 
-      System.out.println("📌 Fraud Investigation Created: Case #" + fraudInvestigation.getFraudCaseId());
-    } else {
-      refund.setRefundStatus(RefundStatus.APPROVED);
+      System.out.println("✅ Fraud Investigation Created: Case #" + fraudInvestigation.getFraudCaseId());
     }
-
-    return refundDetailsRepo.save(refund);
+  } else {
+    // ✅ If not fraud, approve the refund
+    refund.setRefundStatus(RefundStatus.APPROVED);
+    System.out.println("✅ Refund approved (No fraud detected).");
   }
+
+  return refundDetailsRepo.save(refund);
+}
+
 
   private int mapReasonToCode(String reason) {
     return switch (reason.toLowerCase()) {
@@ -159,7 +194,7 @@ public class RefundDetailsService  implements IRefundDetailsService {
 
 
 
-  @Scheduled(fixedRate = 60000) // Runs every 60 seconds
+  @Scheduled(fixedRate = 20000) // Runs every 20 seconds
   public void checkPendingRefundsForFraud() {
     System.out.println("🔍 Running scheduled fraud detection...");
     List<RefundDetails> pendingRefunds = refundDetailsRepo.findAllByRefundStatus(RefundStatus.PENDING);
