@@ -41,9 +41,10 @@ public class FinancialManagementService implements IFinancialManagementService {
 
     @Override
     public void deleteFinancialRecord(int id) {
-        if (!financialManagementRepository.existsById(id)) {
-            throw new RuntimeException("Financial record not found with ID: " + id);
-        }
+        //if (!financialManagementRepository.existsById(id)) {
+            //throw new RuntimeException("Financial record not found with ID: " + id);
+        //}
+        financialManagementRepository.deleteById(id);
+    }
 
-    }
-    }
+}

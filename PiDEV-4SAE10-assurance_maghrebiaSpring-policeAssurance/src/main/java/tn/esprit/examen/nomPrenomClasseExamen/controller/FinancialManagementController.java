@@ -8,7 +8,7 @@ import tn.esprit.examen.nomPrenomClasseExamen.service.FinancialManagementService
 
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/financial")
 @RequiredArgsConstructor
@@ -52,9 +52,10 @@ public class FinancialManagementController {
     public ResponseEntity<Void> deleteFinancialRecord(@PathVariable int id) {
         try {
             financialManagementService.deleteFinancialRecord(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build(); // ✅ Retourne un succès HTTP 204
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build(); // ❌ Retourne un 404 si l'élément n'existe pas
         }
     }
+
 }
