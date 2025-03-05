@@ -16,7 +16,7 @@ public class HistoriqueReclamation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "reclamation_id", nullable = false)
     private Reclamation reclamation;
 

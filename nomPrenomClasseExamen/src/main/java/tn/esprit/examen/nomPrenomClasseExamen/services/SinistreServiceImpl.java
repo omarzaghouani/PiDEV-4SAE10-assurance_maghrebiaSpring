@@ -1,7 +1,9 @@
 package tn.esprit.examen.nomPrenomClasseExamen.services;
 
 import org.springframework.stereotype.Service;
+import tn.esprit.examen.nomPrenomClasseExamen.entities.Reclamation;
 import tn.esprit.examen.nomPrenomClasseExamen.entities.Sinistre;
+import tn.esprit.examen.nomPrenomClasseExamen.entities.StatutSinistre;
 import tn.esprit.examen.nomPrenomClasseExamen.repositories.SinistreRepository;
 import java.util.List;
 import java.util.Optional;
@@ -49,5 +51,20 @@ public class SinistreServiceImpl implements SinistreService {
     @Override
     public void deleteSinistre(int id) {
         sinistreRepository.deleteById(id);
+    }
+
+    @Override
+    public Sinistre updateStatutSinistre(int id, StatutSinistre statutSinistre) {
+        Optional<Sinistre> optionalSinsitre = sinistreRepository.findById(id);
+
+        if (optionalSinsitre.isPresent()) {
+            Sinistre existingSinstre = optionalSinsitre.get();
+
+            existingSinstre.setStatutSinistre(statutSinistre);
+
+            return sinistreRepository.save(existingSinstre);
+        } else {
+            throw new RuntimeException("Sinistre avec l'ID " + id + " non trouvée.");
+        }
     }
 }

@@ -1,12 +1,18 @@
 package tn.esprit.examen.nomPrenomClasseExamen.controllers;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.examen.nomPrenomClasseExamen.entities.Reclamation;
 import tn.esprit.examen.nomPrenomClasseExamen.entities.Sinistre;
+import tn.esprit.examen.nomPrenomClasseExamen.entities.StatutReclamation;
+import tn.esprit.examen.nomPrenomClasseExamen.entities.StatutSinistre;
 import tn.esprit.examen.nomPrenomClasseExamen.services.SinistreService;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/sinistres")
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class SinistreController {
 
     private final SinistreService sinistreService;
@@ -38,5 +44,15 @@ public class SinistreController {
     @DeleteMapping("/delete/{id}")
     public void deleteSinistre(@PathVariable int id) {
         sinistreService.deleteSinistre(id);
+    }
+
+    @PutMapping("/{id}/statut")
+    public ResponseEntity<Sinistre> updateStatus(@PathVariable int id, @RequestParam StatutSinistre statutSinistre) {
+        try {
+            Sinistre updatedSinistre = sinistreService.updateStatutSinistre(id, statutSinistre);
+            return ResponseEntity.ok(updatedSinistre);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(null);
+        }
     }
 }

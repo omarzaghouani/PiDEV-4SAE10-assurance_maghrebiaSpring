@@ -19,12 +19,12 @@ public class Reclamation {
     private int clientId;
 
     @Enumerated(EnumType.STRING)
-    private TypeReclamation typeReclamation;  // ✅ Correction du nom de l'attribut
+    private TypeReclamation typeReclamation;
 
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private StatutReclamation statutReclamation; // ✅ Correction du nom de l'attribut
+    private StatutReclamation statutReclamation;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreation;
