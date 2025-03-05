@@ -1,6 +1,7 @@
 package tn.esprit.examen.nomPrenomClasseExamen.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import tn.esprit.examen.nomPrenomClasseExamen.service.IFeedbackService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +106,11 @@ public class FeedBackController {
                 .headers(headers)
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(bis.readAllBytes());
+    }
+
+    @GetMapping("/recherche")
+    public List<FeedBack> rechercheGlobale(@RequestParam String keyword) {
+        return feedBackService.rechercheGlobale(keyword);
     }
 
 

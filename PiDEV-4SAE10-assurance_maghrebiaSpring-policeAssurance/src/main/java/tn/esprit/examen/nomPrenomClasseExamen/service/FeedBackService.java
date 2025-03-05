@@ -40,6 +40,8 @@ public class FeedBackService implements IFeedbackService {
 
     @Autowired
     private final FeedBackRepository feedbackRepo;
+    @Autowired
+    private FeedBackRepository feedBackRepository;
 
     @Override
     public FeedBack addFeedBack(FeedBack feedback) {
@@ -220,8 +222,9 @@ public class FeedBackService implements IFeedbackService {
     }
 
 
-
-
+    public List<FeedBack> rechercheGlobale(String keyword) {
+        return feedBackRepository.rechercheGlobale(keyword);
+    }
 
 
 }
