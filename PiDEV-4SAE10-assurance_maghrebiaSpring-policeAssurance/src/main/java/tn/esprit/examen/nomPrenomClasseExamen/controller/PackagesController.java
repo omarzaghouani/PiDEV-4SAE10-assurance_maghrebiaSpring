@@ -19,11 +19,19 @@ public class PackagesController {
 
     private final IPackageService packageService;
 
-    @PostMapping
-    public ResponseEntity<Package> addPackage(@RequestBody Package packageEntity) {
-        Package savedPackage = packageService.addPackage(packageEntity);
-        return ResponseEntity.ok(savedPackage);
+    @PostMapping("/add")
+    public ResponseEntity<?> addPackage(@RequestBody Package packageEntity) {
+        try {
+            // Call the service to save the package
+            Package savedPackage = packageService.addPackage(packageEntity);
+            return ResponseEntity.ok(savedPackage); // Return the saved package
+        } catch (Exception e) {
+            // Catch and return a user-friendly error response
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error adding package: " + e.getMessage());
+        }
     }
+
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Package> updatePackage(@PathVariable Long id, @RequestBody Package packageEntity) {
