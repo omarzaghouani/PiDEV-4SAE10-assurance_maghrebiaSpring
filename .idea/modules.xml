@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/PiDEV-4SAE10-assurance_maghrebiaSpring.iml" filepath="$PROJECT_DIR$/.idea/PiDEV-4SAE10-assurance_maghrebiaSpring.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PiDEV-4SAE10-assurance_maghrebiaSpring-policeAssurance/nomPrenomClasseExamen.iml" filepath="$PROJECT_DIR$/PiDEV-4SAE10-assurance_maghrebiaSpring-policeAssurance/nomPrenomClasseExamen.iml" />
     </modules>
   </component>
 </project>
