@@ -1,7 +1,10 @@
 package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "partnership_offers")
@@ -15,7 +18,9 @@ public class PartnershipOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String offerName;
+
     private String offerDetails;
     private double discountRate;
     private String validityPeriod;

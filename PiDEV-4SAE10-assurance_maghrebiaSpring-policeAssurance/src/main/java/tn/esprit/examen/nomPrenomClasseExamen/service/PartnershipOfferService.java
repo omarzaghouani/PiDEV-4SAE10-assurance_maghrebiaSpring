@@ -20,19 +20,19 @@ public class PartnershipOfferService implements IPartnershipOfferService {
 
     @Override
     public PartnershipOffer updatePartnershipOffer(Long id, PartnershipOffer partnershipOfferEntity) {
-        /*
         return partnershipOfferRepository.findById(id)
                 .map(existingOffer -> {
-                    existingOffer.setPartnership(partnershipOfferEntity.getPartnership());
+                    existingOffer.setOfferName(partnershipOfferEntity.getOfferName());
                     existingOffer.setOfferDetails(partnershipOfferEntity.getOfferDetails());
+                    existingOffer.setDiscountRate(partnershipOfferEntity.getDiscountRate());
                     existingOffer.setValidityPeriod(partnershipOfferEntity.getValidityPeriod());
+                    existingOffer.setPartnership(partnershipOfferEntity.getPartnership());
+                    existingOffer.setAPackage(partnershipOfferEntity.getAPackage());
                     return partnershipOfferRepository.save(existingOffer);
                 })
                 .orElse(null);
-        .
-         */
-        return null;
     }
+
 
     @Override
     public void deletePartnershipOffer(Long id) {

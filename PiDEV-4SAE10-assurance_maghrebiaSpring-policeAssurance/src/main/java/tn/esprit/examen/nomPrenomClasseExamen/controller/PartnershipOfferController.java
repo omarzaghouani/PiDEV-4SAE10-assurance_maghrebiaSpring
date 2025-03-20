@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/partnership-offers")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200") // Allow Angular frontend
 
 public class PartnershipOfferController {
     private final IPartnershipOfferService partnershipOfferService; // ✅ Inject service
@@ -20,13 +21,13 @@ public class PartnershipOfferController {
         PartnershipOffer savedOffer = partnershipOfferService.addPartnershipOffer(partnershipOffer);
         return ResponseEntity.ok(savedOffer);
     }
-/*
+
     @PutMapping("/{id}")
     public ResponseEntity<PartnershipOffer> updatePartnershipOffer(@PathVariable Long id, @RequestBody PartnershipOffer partnershipOffer) {
         PartnershipOffer updatedOffer = partnershipOfferService.updatePartnershipOffer(id, partnershipOffer);
         return updatedOffer != null ? ResponseEntity.ok(updatedOffer) : ResponseEntity.notFound().build();
     }
-*/
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePartnershipOffer(@PathVariable Long id) {
         partnershipOfferService.deletePartnershipOffer(id);
