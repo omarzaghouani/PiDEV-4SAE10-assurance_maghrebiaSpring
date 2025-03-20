@@ -1,5 +1,6 @@
 package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class Partnership {
     private String agreementDetails;
 
     @OneToMany(mappedBy = "partnership", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<PartnershipOffer> offers;
 
     @ManyToMany

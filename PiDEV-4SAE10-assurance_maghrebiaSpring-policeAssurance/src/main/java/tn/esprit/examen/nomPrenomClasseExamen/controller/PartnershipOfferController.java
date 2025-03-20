@@ -8,10 +8,10 @@ import tn.esprit.examen.nomPrenomClasseExamen.service.IPartnershipOfferService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/partnership-offers")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200") // Allow Angular frontend
 
 public class PartnershipOfferController {
     private final IPartnershipOfferService partnershipOfferService; // ✅ Inject service

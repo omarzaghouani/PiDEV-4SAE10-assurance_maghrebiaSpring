@@ -1,5 +1,6 @@
 package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -27,10 +28,12 @@ public class PartnershipOffer {
 
     @ManyToOne
     @JoinColumn(name = "partnership_id", nullable = false)
+    @JsonIgnoreProperties("offers")  // ignore back reference
     private Partnership partnership;
 
     @ManyToOne
     @JoinColumn(name = "package_id", nullable = false) // NEW RELATIONSHIP
+    @JsonIgnoreProperties("offers")  // adjust depending on how your entities relate
     private Package aPackage;
 
 }

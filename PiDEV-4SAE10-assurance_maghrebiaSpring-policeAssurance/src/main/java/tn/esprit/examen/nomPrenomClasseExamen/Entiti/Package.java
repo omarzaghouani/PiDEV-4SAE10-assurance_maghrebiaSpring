@@ -39,5 +39,6 @@ public class Package {
     private List<Subscription> subscriptions;
 
     @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL, orphanRemoval = true) // NEW RELATIONSHIP
+    @JsonIgnore
     private List<PartnershipOffer> partnershipOffers;
 }
