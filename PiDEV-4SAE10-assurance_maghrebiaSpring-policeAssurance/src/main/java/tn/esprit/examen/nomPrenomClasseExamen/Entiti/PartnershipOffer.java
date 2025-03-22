@@ -1,6 +1,7 @@
 package tn.esprit.examen.nomPrenomClasseExamen.Entiti;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -27,12 +28,13 @@ public class PartnershipOffer {
     private String validityPeriod;
 
     @ManyToOne
-    @JoinColumn(name = "partnership_id", nullable = false)
+    @JoinColumn(name = "partnership_id", nullable = true)
     @JsonIgnoreProperties("offers")  // ignore back reference
     private Partnership partnership;
 
     @ManyToOne
-    @JoinColumn(name = "package_id", nullable = false) // NEW RELATIONSHIP
+    @JoinColumn(name = "package_id", nullable = true) // NEW RELATIONSHIP
+    @JsonProperty("apackage") // 👈 forces JSON to accept/send it as "apackage"
     @JsonIgnoreProperties("offers")  // adjust depending on how your entities relate
     private Package aPackage;
 
