@@ -55,4 +55,19 @@ public class PartnershipController {
     public void deletePartnership(@PathVariable Long id) {
         partnershipService.deletePartnership(id);
     }
+
+    //advanced functions
+    // ✅ Approve Partnership
+    @PutMapping("/approve/{id}")
+    public ResponseEntity<?> approvePartnership(@PathVariable Long id) {
+        Partnership partnership = partnershipService.approvePartnership(id);
+        return partnership != null ? ResponseEntity.ok(partnership) : ResponseEntity.notFound().build();
+    }
+
+    // ✅ Reject Partnership
+    @PutMapping("/reject/{id}")
+    public ResponseEntity<?> rejectPartnership(@PathVariable Long id) {
+        boolean rejected = partnershipService.rejectPartnership(id);
+        return rejected ? ResponseEntity.ok("Partnership rejected") : ResponseEntity.notFound().build();
+    }
 }

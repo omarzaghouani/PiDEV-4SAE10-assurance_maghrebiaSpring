@@ -24,6 +24,8 @@ public class Partnership {
     private String phoneNumber;
     private String industry;
     private String agreementDetails;
+    private boolean approved = false; // ✅ Add this field
+
 
     @OneToMany(mappedBy = "partnership", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
