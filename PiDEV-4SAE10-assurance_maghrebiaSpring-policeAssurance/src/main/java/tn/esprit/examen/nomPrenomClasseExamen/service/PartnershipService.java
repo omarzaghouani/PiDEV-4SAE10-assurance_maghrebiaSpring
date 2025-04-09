@@ -1,5 +1,6 @@
 package tn.esprit.examen.nomPrenomClasseExamen.service;
 
+import tn.esprit.examen.nomPrenomClasseExamen.service.TwilioService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class PartnershipService {
 
     @Autowired
     private PartnershipRepository partnershipRepository;
+
+    @Autowired
+    private TwilioService twilioService;
 
     public List<Partnership> getAllPartnerships() {
         return partnershipRepository.findAll();
@@ -59,16 +63,28 @@ public class PartnershipService {
     public Partnership approvePartnership(Long id) {
         return partnershipRepository.findById(id)
                 .map(partnership -> {
-                    partnership.setApproved(true); // ✅ Mark as approved
-                    return partnershipRepository.save(partnership);
+                    partnership.setApproved(true);
+                    Partnership saved = partnershipRepository.save(partnership);
+
+                    // 📩 Send approval SMS
+                    String message = "✅ Hello " + partnership.getCompanyName() + ", your partnership request has been approved!";
+                    twilioService.sendSms(partnership.getPhoneNumber(), message);
+
+                    return saved;
                 })
                 .orElse(null);
     }
 
     // ✅ Reject Partnership (Delete it)
     public boolean rejectPartnership(Long id) {
-        Optional<Partnership> partnership = partnershipRepository.findById(id);
-        if (partnership.isPresent()) {
+        Optional<Partnership> partnershipOpt = partnershipRepository.findById(id);
+        if (partnershipOpt.isPresent()) {
+            Partnership partnership = partnershipOpt.get();
+
+            // 📩 Send rejection SMS before deletion
+            String message = "❌ Hello " + partnership.getCompanyName() + ", we regret to inform you that your partnership request was rejected.";
+            twilioService.sendSms(partnership.getPhoneNumber(), message);
+
             partnershipRepository.deleteById(id);
             return true;
         }
