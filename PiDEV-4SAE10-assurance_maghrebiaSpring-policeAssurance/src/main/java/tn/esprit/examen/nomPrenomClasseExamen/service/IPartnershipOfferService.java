@@ -9,4 +9,9 @@ public interface IPartnershipOfferService {
     void deletePartnershipOffer(Long id);
     List<PartnershipOffer> getAllPartnershipOffers();
     PartnershipOffer getPartnershipOfferById(Long id);
+
+    //advanced functionality
+    List<Object[]> getTopCompaniesWithMostOffers();
+    Double getAverageDiscountRate();
+    Object[] getActiveVsExpiredOfferStats(String year);
 }
