@@ -7,12 +7,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.FinancialManagement;
 import tn.esprit.examen.nomPrenomClasseExamen.repository.FinancialManagementRepository;
+import tn.esprit.examen.nomPrenomClasseExamen.service.CurrencyService;
 import tn.esprit.examen.nomPrenomClasseExamen.service.FinancialManagementService;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/financial")
@@ -99,4 +102,19 @@ public class FinancialManagementController {
 
     }
 
+
+
+    private final CurrencyService currencyService;
+
+    @GetMapping("/convert")
+    public double convertCurrency(@RequestParam String from,
+                                  @RequestParam String to,
+                                  @RequestParam double amount) {
+        return currencyService.convert(from, to, amount);
+    }
+
+    @GetMapping("/currencies")
+    public Set<String> getCurrencies() {
+        return currencyService.getAvailableCurrencies();
+    }
 }
