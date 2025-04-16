@@ -69,4 +69,48 @@ public class MailService {
         }
     }
 
+
+    public void sendPaymentSuccessEmail(String toEmail ,double amount, String Note ,String trackingLink) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            String subject = "Paiement de remboursement réussi ✅";
+
+            String htmlContent =
+                    "<div style='font-family: Arial, sans-serif; padding: 20px;'>"
+                            + "<div style='margin-bottom: 20px; text-align: center;'>"
+                            + "<svg version='1.0' xmlns='http://www.w3.org/2000/svg' width='150px' height='55px' viewBox='0 0 300.000000 112.000000' preserveAspectRatio='xMidYMid meet'>"
+                            + "  <g transform='translate(0.000000,112.000000) scale(0.100000,-0.100000)' fill='#f89434' stroke='none'>"
+                            + "    <path d='M2137 1098 c-8 -30 2 -70 17 -65 14 5 14 79 0 84 -6 2 -14 -6 -17 -19z'/>"
+                            + "    <path d='M1316 1063 c-3 -3 -6 -24 -6 -45 0 -27 4 -38 15 -38 11 0 15 11 15 39 0 38 -10 57 -24 44z'/>"
+                            + "    <path d='M1255 1041 c-8 -27 3 -63 18 -58 7 2 12 19 12 37 0 38 -20 52 -30 21z'/>"
+                            + "  </g></svg>"
+                            + "</div>"
+                            + "<h2 style='color: #28a745; text-align: center;'>Remboursement effectué avec succès !</h2>"
+                            + "<p style='color: #333333; font-size: 16px; text-align: center;'>"
+                            + "Bonjour,<br><br>Votre paiement de remboursement a été traité avec succès. Vous trouverez ci-dessous les détails de la transaction :</p>"
+                            + "<ul style='font-size: 16px; color: #333333; text-align: center; list-style: none; padding: 0;'>"
+                            + "<li><strong>refund value total of  :</strong> " + amount + " DT</li>"
+                            + "<li><strong> refund  :</strong> #" + Note + "</li>"
+                            + "</ul>"
+                            + "<div style='text-align: center; margin-top: 20px;'>"
+                            + "<a href='" + trackingLink + "' style='display: inline-block; padding: 12px 24px; color: white; background-color: #28a745; text-decoration: none; border-radius: 5px; font-size: 16px;'>"
+                            + "Voir les détails</a>"
+                            + "</div>"
+                            + "<p style='text-align: center; color: #999; font-size: 12px; margin-top: 30px;'>"
+                            + "Merci d'avoir utilisé notre service. Ce remboursement a été généré automatiquement via notre plateforme sécurisée Paymee.</p>"
+                            + "</div>";
+
+            helper.setFrom("doorstep@tgtv.tn");
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

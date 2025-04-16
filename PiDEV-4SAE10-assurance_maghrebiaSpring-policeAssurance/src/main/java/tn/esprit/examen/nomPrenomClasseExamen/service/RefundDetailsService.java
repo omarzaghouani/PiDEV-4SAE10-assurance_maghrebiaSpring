@@ -1,5 +1,6 @@
 package tn.esprit.examen.nomPrenomClasseExamen.service;
 
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,17 @@ import tn.esprit.examen.nomPrenomClasseExamen.repository.FraudDetailsRepo;
 import tn.esprit.examen.nomPrenomClasseExamen.repository.FraudInvestigationRepo;
 import tn.esprit.examen.nomPrenomClasseExamen.repository.RefundDetailsRepo;
 import tn.esprit.examen.nomPrenomClasseExamen.repository.UserRepository;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -177,25 +185,25 @@ public RefundDetails processRefund(RefundDetails refund) {
       fraudDetailsRepo.save(fraudDetails);
 
       System.out.println("✅ Fraud Investigation Created: Case #" + fraudInvestigation.getFraudCaseId());
-      mailService.sendHtmlEmail(
+      /*mailService.sendHtmlEmail(
               userEmail,
               " 🔍Refund in process",
               "Good news! Your refund is under study.",
               "View My Refunds",
               link
-      );
+      );*/
     }
   } else {
     // ✅ If not fraud, approve the refund
     refund.setRefundStatus(RefundStatus.APPROVED);
     System.out.println("✅ Refund approved (No fraud detected).");
-    mailService.sendHtmlEmail(
+  /**//*  mailService.sendHtmlEmail(
             userEmail,
             "✅ Refund Approved",
             "Good news! Your refund has been approved.",
             "View My Refunds",
             link
-    );
+    );*/
   }
 
   return refundDetailsRepo.save(refund);
@@ -228,5 +236,56 @@ public RefundDetails processRefund(RefundDetails refund) {
     System.out.println("✅ Fraud detection scheduler completed.");
   }
 
-  
+
+  public String sendPaymeePayout(PaymeePayoutRequest request) throws Exception {
+    String apiUrl = "https://sandbox.paymee.tn/api/v1/payouts";
+    String apiKey = "7fd01a99bcb296b8e79be6d3ddd39b6ca260c434"; // 🔐 Use your key
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.set("Authorization", "Token " + apiKey);
+
+    Map<String, Object> payload = new HashMap<>();
+    payload.put("recipient", request.getRecipientEmail());
+    payload.put("amount", request.getAmount());
+    payload.put("note", request.getNote());
+
+    HttpEntity<Map<String, Object>> entity = new HttpEntity<>(payload, headers);
+    RestTemplate restTemplate = new RestTemplate();
+
+    ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, entity, String.class);
+
+    return response.getBody();
+  }
+
+  public byte[] generateRefundPdfFromHtml(RefundDetails refund) throws IOException {
+    String logoPath = Objects.requireNonNull(getClass().getResource("/image/OIP.jpg"), "Logo image not found").toExternalForm();
+
+    String html = "<html><head>"
+            + "<style> body { font-family: Arial, sans-serif; padding: 20px; } </style>"
+            + "</head><body>"
+            + "<div style='text-align: center;'>"
+            + "<img src='" + logoPath + "' style='width: 200px; margin-bottom: 20px;'/>"
+            + "<h2 style='color: #28a745;'>Remboursement Confirmé</h2>"
+            + "</div>"
+            + "<p>Ce document confirme que le remboursement a été traité :</p>"
+            + "<ul>"
+            + "<li><strong>ID :</strong> " + refund.getRefundId() + "</li>"
+            + "<li><strong>Montant :</strong> " + refund.getAmount() + " DT</li>"
+            + "<li><strong>Date :</strong> " + new Date() + "</li>"
+            + "<li><strong>Status :</strong> " + refund.getRefundStatus() + "</li>"
+            + "</ul>"
+            + "<p>Merci d'avoir utilisé notre service.</p>"
+            + "</body></html>";
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfRendererBuilder builder = new PdfRendererBuilder();
+    builder.useFastMode();
+    builder.withHtmlContent(html, null);
+    builder.toStream(baos);
+    builder.run();
+    return baos.toByteArray();
+  }
+
+
 }
