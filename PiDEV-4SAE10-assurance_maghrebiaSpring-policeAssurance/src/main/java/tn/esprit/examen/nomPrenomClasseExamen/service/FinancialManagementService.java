@@ -1,10 +1,12 @@
 package tn.esprit.examen.nomPrenomClasseExamen.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.examen.nomPrenomClasseExamen.Entiti.FinancialManagement;
 import tn.esprit.examen.nomPrenomClasseExamen.repository.FinancialManagementRepository;
 
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,5 +48,46 @@ public class FinancialManagementService implements IFinancialManagementService {
         //}
         financialManagementRepository.deleteById(id);
     }
+
+    public String runPredictionScript(List<FinancialManagement> data) throws IOException {
+        System.out.println("📤 [INFO] Début exécution du script Python");
+
+        // Convertir les données en JSON
+        String jsonData = new ObjectMapper().writeValueAsString(data);
+        String safeJson = jsonData.replace("\"", "\\\"").replace("\n", " ");
+
+        File scriptFile = new File("PiDEV-4SAE10-assurance_maghrebiaSpring-policeAssurance/src/main/resources/python/predictor.py");
+        String scriptPath = scriptFile.getAbsolutePath();
+
+        System.out.println("📁 [DEBUG] Chemin absolu script : " + scriptPath);
+
+        ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, safeJson);
+        System.out.println("😒😒 [DEBUG] Chemin absolu script : " + scriptPath+"   " +safeJson);
+        processBuilder.redirectErrorStream(true);
+        Process process = processBuilder.start();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        StringBuilder output = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            output.append(line);
+        }
+
+        // Attente de fin de process avec timeout
+        try {
+            if (!process.waitFor(10, java.util.concurrent.TimeUnit.SECONDS)) {
+                process.destroy();
+                throw new RuntimeException("⏱️ Timeout : le script Python a mis trop de temps à répondre");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            process.destroy();
+        }
+
+        System.out.println("✅ [SUCCESS] Résultat brut : " + output.toString());
+
+        return output.toString();
+    }
+
 
 }
