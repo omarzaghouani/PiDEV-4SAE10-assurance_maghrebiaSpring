@@ -52,4 +52,21 @@ public class FraudInvestigationController {
     fraudInvestigationService.deleteFraudInvestigation(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
+
+
+  @GetMapping("/email-by-fraud/{fraudCaseId}")
+  public ResponseEntity<String> getEmailByFraudCaseId(@PathVariable int fraudCaseId) {
+    System.out.println("📥 API called with fraudCaseId: " + fraudCaseId);
+
+    String email = fraudInvestigationService.getUserEmailByFraudCaseId(fraudCaseId);
+    System.out.println("✉️ Email: " + email);
+
+    if (email != null) {
+      return ResponseEntity.ok(email);
+    } else {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+
 }

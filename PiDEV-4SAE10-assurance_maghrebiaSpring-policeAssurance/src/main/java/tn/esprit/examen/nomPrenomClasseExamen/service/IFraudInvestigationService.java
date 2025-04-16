@@ -15,4 +15,6 @@ public interface IFraudInvestigationService {
   FraudInvestigation updateFraudInvestigation(int id, FraudInvestigation fraudInvestigation);
 
   void deleteFraudInvestigation(int id);
+
+    String getUserEmailByFraudCaseId(int fraudCaseId);
 }

@@ -49,4 +49,10 @@ public class FraudInvestigationService implements  IFraudInvestigationService{
     fraudInvestigationRepo.deleteById(id);
   }
 
+
+  public String getUserEmailByFraudCaseId(int fraudCaseId) {
+    return fraudInvestigationRepo.findUserEmailByFraudCaseId(fraudCaseId);
+  }
+
+
 }
